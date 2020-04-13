@@ -43,7 +43,7 @@
         enabled: yes 
       ignore_errors: yes 
 
-- route53:
+    - route53:
       state: present
       zone: safedevops.com
       record: wordpress.safedevops.com
