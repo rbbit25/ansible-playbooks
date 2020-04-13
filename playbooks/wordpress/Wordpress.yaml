@@ -44,10 +44,10 @@
       ignore_errors: yes 
 
     - route53:
-      state: present
-      zone: safedevops.com
-      record: wordpress.safedevops.com
-      type: A
-      ttl: 60
-      value: 54.165.48.231
-      wait: yes
+          state: create
+          hosted_zone_id: Z01131383UY10PQUY6PSI
+          record: wordpress.safedevops.com
+          type: A
+          ttl: 60
+          value: 54.165.48.231
+          wait: yes
