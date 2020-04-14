@@ -49,6 +49,7 @@
     - route53:
           state: create
           hosted_zone_id: Z01131383UY10PQUY6PSI
+          zone: safedevops.com
           record: wordpress.safedevops.com
           type: A
           ttl: 60
