@@ -1,57 +1,129 @@
 ---
-- name: Install wordpress on CentOS 7 
-  gather_facts: no 
-  hosts: all
-  become: true
+- name: Installs wordpress
+  hosts: 3.87.214.205
+  become: yes
   become_method: sudo
-  user: centos       
-  tasks: 
-    - name: Install httpd
-      package: 
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - httpd
-        - php
-        - mariadb-server
-        - mysql
-        - elinks
-        - php-mysql
-        - php-gd 
-      ignore_errors: yes 
+  tasks:
+  - name: Install necessary packages
+    package:
+      name: "{{item}}"
+      state: latest
+    with_items:
+      - epel-release
+      - wget 
+      - unzip
+      - mariadb-server
+    ignore_errors: true
 
-    - name: Download wordpress
-      get_url:
-        url: https://wordpress.org/latest.tar.gz 
-        dest: /tmp/
+  - name: Install epel-release
+    shell: "sudo yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm -y"
+    - name: config manager enabled 
+    shell: "sudo yum-config-manager --enable remi-php72"
+    - name : update httpd PHP 
+    shell: "sudo yum install httpd php php-common php-opcache php-mcrypt php-cli php-gd php-curl php-mysql mysql -y" 
+  
+  - name: Download wordpress Package
+    get_url:
+      url: https://wordpress.org/wordpress-5.2.1.tar.gz
+      dest: /tmp/
 
-    - name: Unzip wordpress
-      unarchive: 
-        src: /tmp/wordpress-5.4.tar.gz
-        dest: /var/www/html/
-        remote_src: yes 
+  - name: Unzip wordpres file
+    unarchive:
+      src: "/tmp/wordpress-5.2.1.tar.gz"    
+      dest: "/var/www/html"
+      remote_src: yes
+    become: yes
+    become_method: sudo
 
-    - name: move files
-      shell: "mv /var/www/html/wordpress/*  /var/www/html/"
-      ignore_errors: yes 
+  - name: Move files to html folder
+    shell: "mv /var/www/html/wordpress/* /var/www/html"
+    become: yes
+    become_method: sudo
+    ignore_errors: yes
 
-    - name: Move index.html 
-      shell: "mv /var/www/html/index.html /tmp/"
-      ignore_errors: true
+  - name: Restart httpd
+    systemd:
+      name: httpd
+      state: restarted  
+      enabled: yes
+    become: yes
+    become_method: sudo
 
-    - name: run apache 
-      systemd: 
-        name: httpd 
-        state: restarted 
-        enabled: yes 
-      ignore_errors: yes 
+  - name: Route53 A record
+    route53:
+      state: "present"
+      zone: "safedevops.com"
+      record: "wordpress.safedevops.com"
+      type: A
+      ttl: 60
+      value: "3.87.214.205"
 
-    - route53:
-          state: create
-          hosted_zone_id: Z01131383UY10PQUY6PSI
-          zone: safedevops.com
-          record: wordpress.safedevops.com
-          type: A
-          ttl: 60
-          value: 54.165.48.231
-          wait: yes
+
+  - name: Add Bob
+    user:
+      name: bob
+      state: present
+  - name: Create a 2048-bit SSH key for user Bob in ~bob/.ssh/id_rsa
+    user:
+      name: bob
+      generate_ssh_key: yes
+      ssh_key_bits: 2048
+      group: admin
+      ssh_key_file: .ssh/id_rsa
+
+  - name: Add Ben
+    user:
+      name: ben
+      state: present
+  - name: Create a 2048-bit SSH key for user Bob in ~ben/.ssh/id_rsa
+    user:
+      name: ben
+      generate_ssh_key: yes
+      ssh_key_bits: 2048
+      group: admin
+      ssh_key_file: .ssh/id_rsa
+      
+  - name: Add Lisa
+    user:
+      name: lisa
+      state: present
+  - name: Create a 2048-bit SSH key for user Bob in ~lisa/.ssh/id_rsa
+    user:
+      name: lisa
+      generate_ssh_key: yes
+      ssh_key_bits: 2048
+      group: admin
+      ssh_key_file: .ssh/id_rsa
+
+  - name: Add Katty
+    user:
+      name: katty
+      state: present
+  - name: Create a 2048-bit SSH key for user Bob in ~katty/.ssh/id_rsa
+    user:
+      name: katty
+      generate_ssh_key: yes
+      ssh_key_bits: 2048
+      group: admin
+      ssh_key_file: .ssh/id_rsa
+
+  - name: Handler tasks
+    package: 
+      name: httpd
+      state: latest
+    notify: HTTPD RESTART 
+  - name: Install mysql
+    package: 
+      name: mariadb-server
+      state: present
+    notify: MYSQL RESTART
+  
+  handlers:
+  - name: HTTPD RESTART
+    systemd: 
+      name: httpd 
+      state: restarted
+  - name: MYSQL RESTART
+    systemd: 
+      name: mysqld 
+      state: restarted
