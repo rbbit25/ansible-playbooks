@@ -1,12 +1,12 @@
 ---
-- name: Create A Record in Route53 
+- name: Create route53 entry
   hosts: 3.87.214.205
   tasks:
-    - name: Route53 a record
+    - name: route53 A Record
       route53:
         state: "present"
         zone: "safedevops.com"
         record: "wordpress.safedevops.com"
         type: A
-        ttl: 7200
+        ttl: 60
         value: "3.87.214.205"
