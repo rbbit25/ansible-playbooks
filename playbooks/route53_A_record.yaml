@@ -1,6 +1,8 @@
 ---
 - name: Create route53 entry
   hosts: 3.87.214.205
+  become: yes
+  become_method: sudo
   tasks:
   - name: route53 A Record
     route53:
