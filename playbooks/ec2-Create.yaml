@@ -10,7 +10,7 @@
       image: ami-0affd4508a5d2481b
       region: us-east-1
       group: default
-      count: 2
+      count: 1
       vpc-subnet-id: subnet-09bf1d24f2a8fec27
       wait: yes
       assign_public_ip: yes 
