@@ -1,16 +1,22 @@
 ---
-- name: ec2 instance
+- name: Create a instance
   hosts: localhost
-  connection: local
+  gather_facts: False
+  vars:
+    keypair: ansible
+    instance_type: t2.micro
+    security_group: default
+    image: ami-01a6e31ac994bbc09
+    region: eu-west-2
   tasks:
-  - name: Launch EC2
+  - name: Launch instance
     ec2:
-      instance_type: t2.micro
-      key_name: ansible
-      image: ami-01a6e31ac994bbc09
-      region: eu-west-2
-      group: default
-      count: 2
-      vpc-subnet-id: subnet-016eea02c2119e2cc
-      wait: yes
-      assign_public_ip: yes 
+        key_name: "{{ keypair }}"
+        group: "{{ security_group }}"
+        instance_type: "{{ instance_type }}"
+        image: "{{ image }}"
+        wait: true
+        region: "{{ region }}"
+        vpc_subnet_id: subnet-016eea02c2119e2cc
+        assign_public_ip: yes
+    register: ec2
