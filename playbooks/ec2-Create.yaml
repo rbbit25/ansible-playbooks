@@ -7,10 +7,10 @@
     ec2:
       instance type: t2.micro
       key name: createdbytower
-      image: ami-0affd4508a5d2481b
-      region: us-east-1
+      image: ami-01a6e31ac994bbc09
+      region: eu-west-2
       group: default
       count: 1
-      vpc-subnet-id: subnet-09bf1d24f2a8fec27
+      vpc-subnet-id: subnet-016eea02c2119e2cc
       wait: yes
       assign_public_ip: yes 
