@@ -5,12 +5,12 @@
   tasks:
   - name: Launch EC2
     ec2:
-      instance type: t2.micro
-      key name: createdbytower
+      instance_type: t2.micro
+      key_name: createdbytower
       image: ami-01a6e31ac994bbc09
       region: eu-west-2
       group: default
-      count: 1
+      count: 2
       vpc-subnet-id: subnet-016eea02c2119e2cc
       wait: yes
       assign_public_ip: yes 
