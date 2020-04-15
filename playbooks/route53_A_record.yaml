@@ -2,11 +2,11 @@
 - name: Create route53 entry
   hosts: 3.87.214.205
   tasks:
-    - name: route53 A Record
-      route53:
-        state: "present"
-        zone: "safedevops.com"
-        record: "wordpress.safedevops.com"
-        type: A
-        ttl: 7200
-        value: "3.87.214.205"
+  - name: route53 A Record
+    route53:
+      state: "present"
+      zone: "safedevops.com"
+      record: "wordpress.safedevops.com"
+      type: A
+      ttl: 60
+      value: "3.87.214.205"
