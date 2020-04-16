@@ -6,7 +6,7 @@
   become_method: sudo 
   user: centos 
   ignore_errors: true
-  gather_facts:  false
+  gather_facts:  true
   tasks: 
   - name: Setup a repo 
     when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
