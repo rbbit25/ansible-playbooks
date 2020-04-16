@@ -1,0 +1,14 @@
+--- 
+- name: NCPA Installation 
+  hosts: all 
+  become: true 
+  become_method: sudo 
+  user: centos 
+  ignore_errors: true
+  gather_facts:  true
+  tasks: 
+  - name: RESTART_NCPA 
+    when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
+    systemd: 
+      name: ncpa_listener 
+      state: restarted
