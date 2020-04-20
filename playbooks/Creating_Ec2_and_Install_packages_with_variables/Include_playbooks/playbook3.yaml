@@ -1,6 +1,0 @@
----
-- name: Playbook3
-  hosts: localhost
-  tasks: 
-  - name: task3
-    command: "echo Hello from Playbook3"
